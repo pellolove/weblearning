@@ -1,0 +1,9 @@
+@color-red : green;
+.box-shasow(@style,@c){
+    -webkit-box-shadow: @style @c;
+    box-shadow: @style @c; 
+}  
+.box{
+    color: @color-red;
+    .box-shasow(0 0 5px,20%);
+}
