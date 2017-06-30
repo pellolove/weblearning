@@ -6,6 +6,7 @@ const concat = require('gulp-concat');
 // 创建启动服务 https://www.npmjs.com/package/gulp-connect
 const connect = require('gulp-connect');
 
+const less = require('gulp-less');
 // 创建任务
 gulp.task('connect', () => {
 	return connect.server({
@@ -31,10 +32,17 @@ gulp.task('concat', () => {
 		.pipe(gulp.dest('./dist/js/'))
 });
 
+gulp.task('less', () => {
+	return gulp.src('src/less/*.less')
+		.pipe(less())
+		.pipe(gulp.dest('dist/css/'));
+
+});
 //监视程序
 gulp.task('watch', () => {
 	gulp.watch(['./src/js/*.js'], ['concat']);
 	gulp.watch(['./src/*.html'], ['copy']);
+	gulp.watch(['src/less/*.less'],['less']);
 	gulp.watch(['./dist/*.html'], ['html']); //如果html变化，就调用html任务重加载页面html
 })
 //执行

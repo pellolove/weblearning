@@ -1,0 +1,5 @@
+.box {
+  color: #ff0000;
+  -webkit-box-shadow: 0 0 5px 20%;
+  box-shadow: 0 0 5px 20%;
+}
