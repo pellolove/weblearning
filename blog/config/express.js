@@ -1,1 +1,0 @@
-var uri ='mongodb://localhost/mean-book'
