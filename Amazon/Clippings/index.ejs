@@ -1,3 +1,56 @@
-<% if (user) { %>
-  <h2><%= user.name %></h2>
-<% } %>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <link href="index.css" rel="stylesheet">
+
+  <script src="https://cdn.bootcss.com/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <header></header>
+  <content class="container">
+    <nav class="col-xs-4 book-list">
+      <% bookList.forEach((item)=>{ %>      
+      <div class="panel border-left">
+        <h4>         
+          <%=  item.a_title.substring(0,20) %>
+        </h4>
+        <span class="a_author"><%= item.a_author %></span>
+        <blockquote>
+          <%= item.a_content.substring(0,20) %>
+        </blockquote>
+      </div>
+      <% })  %>
+    </nav>
+    <div class="col-xs-8  markdown ">
+      <% markList.forEach((item)=>{ %>
+        <section>
+          <div class="mark">
+            <blockquote>
+             <%= item.a_content %>
+            </blockquote>
+           
+          </div>
+          <div class="mark comment">
+            <blockquote>
+             <%= item.a_content.substring(0,20) %>
+            </blockquote>
+          </div>
+           位置： #<%= item.a_p_start +'-'+ item.a_p_end  %>
+            时间：  <%= item.a_time   %>
+        </section>
+      <%  }) %>
+     
+    </div>
+  </content>
+  <footer></footer>
+</body>
+
+</html>

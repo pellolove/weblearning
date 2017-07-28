@@ -1,5 +1,8 @@
 var fs = require('fs');
 var ejs = require('ejs');
+//https://www.npmjs.com/package/lowdb
+const low = require('lowdb');
+const _ = require('lodash');
 let articleClass = () => {
     return {
         // 文章标题
@@ -20,6 +23,7 @@ let articleClass = () => {
 }
 
 let fileName = 'My Clippings.txt'
+let bookList = [];
 fs.readFile(fileName,
     'utf-8',
     (err, data) => {
@@ -72,22 +76,84 @@ fs.readFile(fileName,
                             )
                         }
                         article_obj.a_time = no_time.substring(
-                            no_time.lastIndexOf('添加于 ') + 1
+                            no_time.lastIndexOf('添加于 ')
                         )
+
+                        if (_.filter(bookList, (item) => {
+                                return item.a_title == article_obj.a_title;
+                            }).length === 0) {
+                            bookList.push(article_obj)
+                        }
+
                         article_jsons.push(article_obj);
                     }
 
 
                 });
             }
-            //开始装载EJS模板保存文件 
-            ejs.renderFile('index.ejs', {
-                user: {
-                    name: 'luopei'
-                }
-            }, (err, str) => {
-                console.log(str)
-            });
+            //数据处理，添加进数据库使用lowdb
 
+
+            // //开始装载EJS模板保存文件 
+            ejs.renderFile('index.ejs', {
+                bookList: bookList,
+                markList: article_jsons,
+
+            }, (err, str) => {
+                console.log(err, str);
+                fs.writeFile('index.html', str);
+            });
+            // const db = low('db.json');
+            // const dbBook = low('books');
+            // // dbBook.setState({});
+            // dbBook.defaults({
+            //     post: article_jsons
+            // }).write();
+            // db.defaults({
+            //         posts: [],
+            //         user: {}
+            //     })
+            //     .write();
+            // db.get('posts')
+            //     .push({
+            //         id: 1,
+            //         title: 'lowdb'
+            //     })
+            //     .write();
+            // db.set('user.name', 'luopei')
+            //     .write();
+
+            // db._.mixin({
+            //     second: function (arr) {
+            //         return arr[1];
+            //     }
+            // });
+            // console.log(db.get('posts').second().value());
+            // db.read('books').then(console.log);
+
+            // if (!db.has('posts').value()) {
+            //     db.set("posts", [])
+            //         .write();
+            // }
+
+            // let res = dbBook.get('0')
+            // .rem
+
+            // console.log(res);
+
+            // let id = dbBook.get('post')
+            //     /* //移除作者为 赵周的post
+            //     .remove({"a_author": "赵周"})  */
+            //     .push({
+            //         "a_title": "6666",
+            //         "a_author": "Yuval Noah Harari",
+            //         "a_type": "mark",
+            //         "a_p_start": "5473",
+            //         "a_p_end": "5475",
+            //         "a_time": "加于 2017年7月24日星期一 上午7:34:27",
+            //         "a_content": "些人，不管得到了多大的恩赐，还是一直郁郁寡欢？我们常认为，只要换个工作、找到老公、买了新车、写完小说，或是付完房贷，做完诸如此类的事，就能让自己快乐得不得了"
+            //     })
+            //     .write();
+            // console.log(id)
         }
     })
