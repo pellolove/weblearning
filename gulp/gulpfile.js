@@ -7,6 +7,13 @@ const concat = require('gulp-concat');
 const connect = require('gulp-connect');
 
 const less = require('gulp-less');
+
+const data = require('gulp-data');
+const ejs = require('gulp-ejs');
+const rename = require('gulp-rename')
+
+
+
 // 创建任务
 gulp.task('connect', () => {
 	return connect.server({
@@ -42,8 +49,21 @@ gulp.task('less', () => {
 gulp.task('watch', () => {
 	gulp.watch(['./src/js/*.js'], ['concat']);
 	gulp.watch(['./src/*.html'], ['copy']);
-	gulp.watch(['src/less/*.less'],['less']);
+	gulp.watch(['src/less/*.less'], ['less']);
 	gulp.watch(['./dist/*.html'], ['html']); //如果html变化，就调用html任务重加载页面html
 })
+
+gulp.task('ejs', () => {
+	return gulp.src('src/ejs/*.ejs')
+		.pipe(data((file) => {
+			return { local: { title: 'hello ejs!' } }
+		}))
+		.pipe(ejs({}))
+		.pipe(rename((path)=>{
+			path.extname = '.html';
+		}))
+		.pipe(gulp.dest('src'));
+})
+
 //执行
 gulp.task('default', ['connect', 'watch']);
